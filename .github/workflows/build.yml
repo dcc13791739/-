@@ -1,17 +1,39 @@
-name: test2
-on: push
+name: 编译大肥鱼
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: write
 jobs:
-  actions:
+  apk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - run: java -version
-  perms:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - run: echo perm-ok
+      - name: 准备安卓 SDK
+        run: |
+          if [ -z "$ANDROID_HOME" ] && [ -d /usr/local/lib/android/sdk ]; then
+            echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> "$GITHUB_ENV"
+            echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> "$GITHUB_ENV"
+          fi
+          echo "SDK=$ANDROID_HOME"
+      - name: 下载工程
+        run: |
+          curl -fsSL -o p.zip https://litter.catbox.moe/xlikqs.zip
+          mkdir -p s && unzip -q p.zip -d s
+      - name: 准备 Gradle
+        run: |
+          curl -fsSL -o g.zip https://services.gradle.org/distributions/gradle-8.7-bin.zip
+          unzip -q g.zip -d "$HOME"
+          echo "$HOME/gradle-8.7/bin" >> "$GITHUB_PATH"
+      - name: 编译
+        working-directory: s/dsh-pet-android
+        run: gradle assembleDebug --no-daemon --stacktrace
+      - name: 发布 APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-latest
+          name: 大肥鱼
+          files: s/dsh-pet-android/app/build/outputs/apk/debug/app-debug.apk
