@@ -1,29 +1,17 @@
-name: 编译大肥鱼
-on:
-  push:
-  workflow_dispatch:
-permissions:
-  contents: write
+name: test2
+on: push
 jobs:
-  apk:
+  actions:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
-      - run: |
-          curl -fsSL -o p.zip https://litter.catbox.moe/xlikqs.zip
-          mkdir -p s && unzip -q p.zip -d s
-      - run: |
-          curl -fsSL -o g.zip https://services.gradle.org/distributions/gradle-8.7-bin.zip
-          unzip -q g.zip -d "$HOME"
-          echo "$HOME/gradle-8.7/bin" >> "$GITHUB_PATH"
-      - run: gradle assembleDebug --no-daemon
-        working-directory: s/dsh-pet-android
-      - uses: softprops/action-gh-release@v2
-        with:
-          tag_name: build-latest
-          name: 大肥鱼
-          files: s/dsh-pet-android/app/build/outputs/apk/debug/app-debug.apk
+      - run: java -version
+  perms:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - run: echo perm-ok
