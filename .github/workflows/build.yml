@@ -6,7 +6,7 @@ permissions:
   contents: write
 jobs:
   apk:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-java@v4
         with:
