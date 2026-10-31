@@ -21,7 +21,7 @@ jobs:
           echo "SDK=$ANDROID_HOME"
       - name: 下载工程
         run: |
-          if ! curl -fL --retry 5 --retry-delay 3 --retry-all-errors -o p.zip https://filebin.net/dafeiyu31b/dshpet-v31.zip; then
+          if ! curl -fL --retry 5 --retry-delay 3 --retry-all-errors -o p.zip https://filebin.net/dafeiyu32/dshpet-v32.zip; then
             echo "主线路失败，改用备用地址"
             curl -fsSL -o p.zip https://litter.catbox.moe/vjsffq.zip
           fi
